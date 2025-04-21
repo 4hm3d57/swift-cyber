@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <link rel="stylesheet" href="../css/verification.css">
+</head>
+<body>
+    <div id="verificationPage">
+        <h2>Verify Your Email</h2>
+        <p>
+            A verification email has been sent to <span id="verificationEmail"></span>. 
+            Please check your inbox and click the verification link.
+        </p>
+        
+        <button id="checkVerificationBtn">I've Verified My Email</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the email from the URL query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            const uniqueId = urlParams.get('uniqueId');
+    
+            // Display the email in the span
+            if (email) {
+                document.getElementById('verificationEmail').textContent = email;
+            }
+    
+            // Display the unique ID
+            
+    
+            // Add event listener to the verification button
+            const checkVerificationBtn = document.getElementById('checkVerificationBtn');
+            checkVerificationBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/check-verification', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email })
+                    });
+    
+                    const result = await response.json();
+    
+                    if (response.ok) {
+                        
+                        window.location.href = '/qrcode';
+                    } else {
+                        alert(result.message || 'Verification failed');
+                    }
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    alert('An error occurred during verification');
+                }
+            });
+        });
+    </script>
+
+    
+</body>
+</html>
