@@ -14,6 +14,7 @@ import (
 func LoginHandler(c *gin.Context) {
     if c.Request.Method != http.MethodPost {
         c.JSON(http.StatusMethodNotAllowed, gin.H{"error" : "invalid request method"})
+        return
     } 
     
     err := c.Request.ParseForm()
@@ -29,6 +30,7 @@ func LoginHandler(c *gin.Context) {
         log.Printf("error getting user: %v", err)
         return
     }
+
     
-    c.Redirect(http.StatusSeeOther, "/terms")
+    c.Redirect(http.StatusSeeOther, "/dashboard-page")
 }

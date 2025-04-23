@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SwiftCyber - Welcome</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/qrcode.css">
+    <link rel="stylesheet" href="/css/qrcode.css">
     
 </head>
 <body>
@@ -16,7 +16,7 @@
         
         <div class="input-group">
             <label>Your unique identifier:</label>
-            <input type="text" id="uniqueIdDisplay" readonly>
+                <input type="text" name="uniqueid" id="uniqueIdDisplay" value="{{.UniqueID}}" readonly>
         </div>
         
         <div id="qrCodeContainer">
@@ -24,70 +24,19 @@
             <div id="loadingQr" class="loading">
                 <i class="fas fa-spinner fa-spin"></i> Loading QR Code...
             </div>
-            <img id="qrCodeImage" width="350" height="350" alt="QR Code" style="display: none;">
+                <img id="qrCodeImage" src="data:image/png;base64,{{.QRCodeBase64}}" name="qrCodeImage" width="350" height="350" alt="QR Code" style="display: none;">
             <p>Right-click to save the image.</p>
         </div>
         
         <div id="errorMessage" class="error" style="display: none;"></div>
-        
-        <button id="proceedBtn">Access Dashboard</button>
+        <!---button to proceed to dashboard should be below here--> 
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const qrCodeImage = document.getElementById('qrCodeImage');
-            const loadingQr = document.getElementById('loadingQr');
-            const errorMessage = document.getElementById('errorMessage');
-            const proceedBtn = document.getElementById('proceedBtn');
-
-            try {
-                // Fetch QR code URL and unique ID
-                const [qrResponse, uniqueIdResponse] = await Promise.all([
-                    fetch('/get-qr-code'),
-                    fetch('/get-unique-id')
-                ]);
-
-                if (!qrResponse.ok || !uniqueIdResponse.ok) {
-                    throw new Error('Failed to fetch data from server');
-                }
-
-                const qrData = await qrResponse.json();
-                const uniqueIdData = await uniqueIdResponse.json();
-
-                // Handle loading states
-                loadingQr.style.display = 'none';
-                qrCodeImage.style.display = 'block';
-
-                // Display QR code
-                qrCodeImage.src = qrData.qrCodeUrl; // Changed from qrCodePath to qrCodeUrl
-                qrCodeImage.onerror = () => {
-                    errorMessage.textContent = 'Failed to load QR code image';
-                    errorMessage.style.display = 'block';
-                    loadingQr.style.display = 'none';
-                };
-
-                // Display unique ID
-                const uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
-                uniqueIdDisplay.value = uniqueIdData.uniqueId;
-
-                // Setup proceed button
-                proceedBtn.addEventListener('click', () => {
-                    window.location.href = `/dashboard?cafeId=${uniqueIdData.uniqueId}`;
-                });
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                loadingQr.style.display = 'none';
-                errorMessage.textContent = 'Failed to load QR code or unique ID. Please refresh the page.';
-                errorMessage.style.display = 'block';
-            }
-        });
-
-        // Additional QR code image handling
-        document.getElementById('qrCodeImage').addEventListener('load', function() {
-            this.style.display = 'block';
-            document.getElementById('loadingQr').style.display = 'none';
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("loadingQr").style.display = "none";
+            document.getElementById("qrCodeImage").style.display = "block";
         });
     </script>
+
 </body>
 </html>

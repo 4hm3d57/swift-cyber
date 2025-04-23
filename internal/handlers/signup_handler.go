@@ -4,6 +4,7 @@ import (
 	"cyber/internal/models"
 	"net/http"
 	"github.com/gin-gonic/gin"
+    "github.com/gin-contrib/sessions"
 )
 
 
@@ -33,11 +34,17 @@ func SignupHandler(c *gin.Context) {
     }
 
     
-    err = models.AddUser(newUser)
+    user, err := models.AddUser(newUser)
     if err != nil {
         return
     }
+
+    session := sessions.Default(c)
+    session.Set("email", user.Email)
+    session.Set("uniqueid", user.UniqueID)
+    session.Save()
+
     
-    c.Redirect(http.StatusSeeOther, "/terms")    
+    c.Redirect(http.StatusSeeOther, "/qrcode")    
 
 }
