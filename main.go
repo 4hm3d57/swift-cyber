@@ -40,8 +40,11 @@ func main() {
     
     router.Static("/css", "./static/css")
     router.LoadHTMLGlob("templates/html/*")
-    
+   
     router.GET("/", func(c *gin.Context){
+        c.HTML(http.StatusOK, "welcome.html", nil)
+    })
+    router.GET("/login-page", func(c *gin.Context){
         c.HTML(http.StatusOK, "login.html", nil)
     })
     router.GET("/signup-page", func(c *gin.Context){
@@ -61,6 +64,9 @@ func main() {
     })
     router.GET("/terms", func(c *gin.Context){
         c.HTML(http.StatusOK, "terms.html", nil)
+    })
+    router.GET("/privacy", func(c *gin.Context){
+        c.HTML(http.StatusOK, "privacy.html", nil)
     })
 
     
