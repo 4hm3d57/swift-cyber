@@ -58,3 +58,5 @@ func QrcodeHandler(c *gin.Context) {
 
 }
 
+
+

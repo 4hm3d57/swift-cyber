@@ -56,14 +56,20 @@ func main() {
     router.GET("/qrcode-page", func(c *gin.Context){
         c.HTML(http.StatusOK, "qrcode.html", nil)
     })
+    router.GET("/contact-page", func(c *gin.Context){
+        c.HTML(http.StatusOK, "contact.html", nil)
+    })
     router.GET("/terms", func(c *gin.Context){
         c.HTML(http.StatusOK, "terms.html", nil)
     })
 
     
-    router.GET("/qrcode", handlers.QrcodeHandler)
     router.POST("/signup", handlers.SignupHandler)
     router.POST("/login", handlers.LoginHandler)
+    router.POST("/add-contact", handlers.AddContactHandler)
+    router.GET("/qrcode", handlers.QrcodeHandler)
+    router.GET("/dashboard", handlers.DashboardHandler)
+    router.GET("/contact", handlers.GetContactUniqueID)
     
 
     port := os.Getenv("PORT") 

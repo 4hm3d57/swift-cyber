@@ -27,14 +27,13 @@ func AddQrcode(qrcode  Qrcode) error {
     return nil
 }
 
-
-func GetQrcode(name, uniqueid string, img []byte) error {
+func GetQRCode(uniqueID string) (*Qrcode, error) {
     var qrcode Qrcode
-    qrcodeCollection := db.GetDB().Collection("qrcodes")
-    err := qrcodeCollection.FindOne(context.Background(), bson.M{"name": name, "uniqueid": uniqueid, "img": img}).Decode(&qrcode)
+    qrCodeCollection := db.GetDB().Collection("qrcodes")
+    err := qrCodeCollection.FindOne(context.Background(), bson.M{"uniqueid": uniqueID}).Decode(&qrcode)
     if err != nil {
-        return err
+        return nil, err
     }
 
-    return nil
+    return &qrcode, err
 }
