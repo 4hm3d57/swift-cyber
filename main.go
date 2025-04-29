@@ -39,6 +39,7 @@ func main() {
     router.Use(sessions.Sessions("cyber-store", store))
     
     router.Static("/css", "./static/css")
+    router.Static("/js", "./static/js")
     router.LoadHTMLGlob("templates/html/*")
    
     router.GET("/", func(c *gin.Context){
@@ -59,6 +60,9 @@ func main() {
     router.GET("/qrcode-page", func(c *gin.Context){
         c.HTML(http.StatusOK, "qrcode.html", nil)
     })
+    router.GET("/upload", func(c *gin.Context){
+        c.HTML(http.StatusOK, "upload.html", nil)
+    })
     router.GET("/contact-page", func(c *gin.Context){
         c.HTML(http.StatusOK, "contact.html", nil)
     })
@@ -73,9 +77,11 @@ func main() {
     router.POST("/signup", handlers.SignupHandler)
     router.POST("/login", handlers.LoginHandler)
     router.POST("/add-contact", handlers.AddContactHandler)
+    router.POST("/upload", handlers.UploadHandler)
     router.GET("/qrcode", handlers.QrcodeHandler)
     router.GET("/dashboard", handlers.DashboardHandler)
     router.GET("/contact", handlers.GetContactUniqueID)
+    router.GET("/upload/:uniqueid", handlers.UploadPage)
     
 
     port := os.Getenv("PORT") 
